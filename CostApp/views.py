@@ -1,4 +1,6 @@
-from django.db.models import Model
+import datetime
+
+from django.core.serializers import json
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
 from django.http import JsonResponse
@@ -15,7 +17,16 @@ def Add(request):
     cost.save()
     return HttpResponse(group.name)
 
+def Show(request):
 
+    result={}
+    #count=0
+    for i in Cost.objects.all():
+        result[i.id]=[i.name,i.price,i.group.name,i.priority,i.user,str(i.date)[:10],str(i.date)[10:19]]
+        #result[i.id]=[i.name,i.price,i.group.name]
+        #count+=1
+
+    return JsonResponse(result)
 
 class Index(TemplateView):
     def get(self, request, *args, **kwargs):
